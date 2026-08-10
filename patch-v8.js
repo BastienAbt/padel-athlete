@@ -1,0 +1,25 @@
+(() => {
+ const REPORT_KEY='padelAthleteExerciseReportsV1';
+ const reports=()=>{try{return JSON.parse(localStorage.getItem(REPORT_KEY)||'[]')}catch(e){return[]}};
+ const saveReports=a=>localStorage.setItem(REPORT_KEY,JSON.stringify(a));
+ function adaptiveReport(type,e){
+   if(!['pain','too_hard','too_easy','equipment'].includes(type))return '';
+   if(type==='pain') return 'Signal enregistré : la progression de cet exercice sera traitée avec prudence. Évite de poursuivre si la douleur augmente.';
+   if(type==='too_hard') return 'Signal enregistré : le coach privilégiera une régression ou une progression plus lente.';
+   if(type==='too_easy') return 'Signal enregistré : ce retour pourra accélérer la progression si les séances confirment une exécution facile et propre.';
+   if(type==='equipment') return 'Signal enregistré : une alternative sans ce matériel sera privilégiée lorsqu’elle existe.';
+ }
+ window.openExerciseReport=function(id){
+   const e=exById(id); if(!e)return;
+   const types=[['visual','Visuel / illustration','Image incorrecte, ambiguë ou peu compréhensible'],['explanation','Explication / consignes','Texte incorrect, incomplet ou confus'],['pain','Douleur / mauvaise tolérance','Cet exercice déclenche une douleur ou une gêne'],['too_hard','Trop difficile','Prérequis insuffisants ou niveau trop élevé'],['too_easy','Trop facile','Niveau clairement inférieur à tes capacités'],['equipment','Matériel indisponible','Impossible à réaliser avec le matériel disponible'],['dose','Dose proposée','Charge, répétitions, séries ou temps inadaptés'],['progression','Progression / prérequis','Mauvaise étape dans le parcours de progression'],['video','Lien vidéo','Lien incorrect, indisponible ou démonstration peu adaptée'],['other','Autre problème','Autre élément à corriger']];
+   const d=document.createElement('dialog'); d.className='report-dialog';
+   d.innerHTML=`<div class="dialog-inner"><button class="dialog-close">×</button><div class="eyebrow">AMÉLIORATION CONTINUE</div><h2>Signaler</h2><p><strong>${e.name}</strong></p><div class="report-types">${types.map(([v,l,s])=>`<label class="report-option"><input type="radio" name="rtype" value="${v}"><span><strong>${l}</strong><small>${s}</small></span></label>`).join('')}</div><label>Détails (optionnel)<textarea id="reportDetails" rows="3" placeholder="Précise ce qui ne va pas…"></textarea></label><button class="primary" id="submitExerciseReport">Enregistrer le signalement</button><p class="muted">Le signalement reste enregistré sur cet appareil et sera inclus dans l’export des données.</p></div>`;
+   document.body.appendChild(d); d.showModal(); d.querySelector('.dialog-close').onclick=()=>{d.close();d.remove()};
+   d.querySelector('#submitExerciseReport').onclick=()=>{const t=d.querySelector('input[name="rtype"]:checked')?.value;if(!t){alert('Choisis le type de problème.');return}const a=reports();a.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),exerciseId:id,exerciseName:e.name,type:t,details:d.querySelector('#reportDetails').value.trim(),date:new Date().toISOString(),resolved:false});saveReports(a);const msg=adaptiveReport(t,e);alert(msg||'Signalement enregistré. Il pourra être analysé lors de la prochaine révision de l’application.');d.close();d.remove();};
+ };
+ const oldOpen=openExercise;
+ openExercise=function(id){oldOpen(id);const box=$('#exerciseDetail');if(box&&!box.querySelector('.report-exercise-btn')){const b=document.createElement('button');b.className='report-exercise-btn';b.textContent='⚑ Signaler cet exercice';b.onclick=()=>openExerciseReport(id);box.prepend(b);}};
+ // Include local reports in exports without changing the existing state schema.
+ const exp=$('#exportData');if(exp){exp.onclick=()=>{const payload={app:'Padel Athlete',version:'v8',exportedAt:new Date().toISOString(),state,exerciseReports:reports(),backups:JSON.parse(localStorage.getItem('padelAthleteBackupsV1')||'[]')};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`padel-athlete-${fmtDate(new Date())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);};}
+ const css=document.createElement('style');css.textContent=`.report-exercise-btn{float:right;background:transparent;border:0;color:var(--warning);font-weight:700;padding:7px 0}.report-types{display:grid;gap:8px;margin:12px 0}.report-option{display:flex!important;gap:10px;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:11px}.report-option input{width:auto;margin-top:3px}.report-option span{display:grid;gap:3px}.report-option small{color:var(--muted);font-size:11px}.report-dialog textarea{width:100%;margin-top:7px}`;document.head.appendChild(css);
+})();
