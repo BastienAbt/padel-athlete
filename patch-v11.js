@@ -40,23 +40,11 @@
     'band-external':{physical:'Renforcement léger des rotateurs externes de l’épaule.',padel:'Préparation et entretien de la coiffe des rotateurs pour les frappes répétées, particulièrement les gestes au-dessus de la tête.'},
     'wall-slide':{physical:'Mobilité active et coordination scapulo-humérale.',padel:'Entretient une élévation de bras contrôlée utile pour les frappes aériennes sans ajouter une forte charge.'}
   };
-  function fallback(e){
-    const cat=(e.cat||'').toLowerCase();
-    if(cat.includes('mobil'))return{physical:'Améliore une amplitude ou un contrôle articulaire utile au mouvement.',padel:'À utiliser si cette mobilité facilite réellement tes positions ou déplacements sur le terrain.'};
-    if(cat.includes('prévention'))return{physical:'Renforce progressivement une zone fréquemment sollicitée.',padel:'Objectif principal : mieux tolérer la répétition des entraînements et tournois.'};
-    if(cat.includes('puissance')||cat.includes('agilité'))return{physical:'Développe vitesse, puissance ou qualité des appuis.',padel:'Cherche un transfert vers des déplacements plus rapides, plus stables et plus réactifs.'};
-    if(cat.includes('tronc'))return{physical:'Développe le contrôle du tronc et la transmission de force.',padel:'Soutient la stabilité pendant les déplacements et la transmission de force vers la raquette.'};
-    return{physical:e.goal||'Développe une qualité physique générale utile à ton programme.',padel:'Le transfert au padel est indirect ; l’intérêt est surtout de construire un corps plus robuste et capable de répéter les efforts.'};
-  }
+  function fallback(e){const cat=(e.cat||'').toLowerCase();if(cat.includes('mobil'))return{physical:'Améliore une amplitude ou un contrôle articulaire utile au mouvement.',padel:'À utiliser si cette mobilité facilite réellement tes positions ou déplacements sur le terrain.'};if(cat.includes('prévention'))return{physical:'Renforce progressivement une zone fréquemment sollicitée.',padel:'Objectif principal : mieux tolérer la répétition des entraînements et tournois.'};if(cat.includes('puissance')||cat.includes('agilité'))return{physical:'Développe vitesse, puissance ou qualité des appuis.',padel:'Cherche un transfert vers des déplacements plus rapides, plus stables et plus réactifs.'};if(cat.includes('tronc'))return{physical:'Développe le contrôle du tronc et la transmission de force.',padel:'Soutient la stabilité pendant les déplacements et la transmission de force vers la raquette.'};return{physical:e.goal||'Développe une qualité physique générale utile à ton programme.',padel:'Le transfert au padel est indirect ; l’intérêt est surtout de construire un corps plus robuste et capable de répéter les efforts.'};}
   function whyBlock(e){const w=WHY[e.id]||fallback(e);return `<section class="why-exercise"><h3>Pourquoi je fais cet exercice ?</h3><div class="why-card"><span class="why-icon">◉</span><div><strong>Pour le physique</strong><p>${w.physical}</p></div></div><div class="why-card"><span class="why-icon">⌁</span><div><strong>Pour le padel</strong><p>${w.padel}</p></div></div><p class="why-note">Le transfert n’est pas automatique : utilise aussi tes sensations et ce que tu observes sur le terrain pour juger si cet exercice mérite de rester prioritaire.</p></section>`;}
+  function removeLegacyMovement(box){if(!box)return;box.querySelectorAll('.movement-visual,.movement-diagram,.exercise-visual-v9,.visual-v9,.exercise-demo,.diagram-caption').forEach(x=>x.remove());[...box.querySelectorAll('h3,h4')].forEach(el=>{if((el.textContent||'').trim().toLowerCase()==='mouvement'){const p=el.parentElement;if(p&&!p.classList.contains('real-visual-block'))p.remove();}});}
   const prevOpen=openExercise;
-  openExercise=function(id){
-    prevOpen(id);
-    const e=exById(id),box=document.querySelector('#exerciseDetail');if(!e||!box)return;
-    box.querySelector('.why-exercise')?.remove();
-    const visual=box.querySelector('[data-real-visual]');
-    if(visual)visual.insertAdjacentHTML('afterend',whyBlock(e));
-    else{const p=[...box.children].find(x=>x.tagName==='P');(p||box.querySelector('h2'))?.insertAdjacentHTML('afterend',whyBlock(e));}
-  };
+  openExercise=function(id){prevOpen(id);const e=exById(id),box=document.querySelector('#exerciseDetail');if(!e||!box)return;removeLegacyMovement(box);box.querySelector('.why-exercise')?.remove();const visual=box.querySelector('[data-real-visual]');if(visual)visual.insertAdjacentHTML('afterend',whyBlock(e));else{const p=[...box.children].find(x=>x.tagName==='P');(p||box.querySelector('h2'))?.insertAdjacentHTML('afterend',whyBlock(e));}}
+  removeLegacyMovement(document.querySelector('#exerciseDetail'));
   const css=document.createElement('style');css.textContent=`.why-exercise{margin:14px 0}.why-exercise h3{margin:0 0 9px}.why-card{display:grid;grid-template-columns:30px 1fr;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px;margin:7px 0}.why-card strong{color:var(--accent)}.why-card p{margin:5px 0 0;font-size:13px;line-height:1.4}.why-icon{font-size:20px;color:var(--accent)}.why-note{font-size:11px;color:var(--muted);line-height:1.4}`;document.head.appendChild(css);
 })();
