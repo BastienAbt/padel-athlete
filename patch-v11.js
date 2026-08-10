@@ -1,0 +1,62 @@
+(() => {
+  const WHY={
+    'box-jump':{physical:'Puissance des membres inférieurs, coordination de la triple extension et qualité de réception.',padel:'Soutient les démarrages explosifs, les reprises d’appuis et les sauts sur smash. À observer : premiers pas plus vifs et meilleure stabilité à la réception.'},
+    'leg-press':{physical:'Force générale des quadriceps et fessiers avec une technique relativement simple à charger.',padel:'Crée une réserve de force pour pousser au sol lors des accélérations, freinages et sorties de position basse.'},
+    'rdl':{physical:'Force des ischio-jambiers et fessiers, contrôle de la charnière de hanche.',padel:'Aide à freiner, repartir, rester solide en position basse et mieux tolérer les efforts répétés des chaînes postérieures.'},
+    'bulgarian-split':{physical:'Force unilatérale, stabilité du bassin et contrôle du genou.',padel:'Très proche des contraintes asymétriques des déplacements : poussée sur une jambe, freinage et récupération après une frappe décentrée.'},
+    'calf-straight':{physical:'Renforcement du gastrocnémien et capacité du complexe cheville-mollet à produire et absorber de la force.',padel:'Soutient les petits bonds, accélérations et changements de direction et participe à la tolérance aux tournois répétés.'},
+    'calf-bent':{physical:'Renforcement du soléaire, particulièrement sollicité genou fléchi.',padel:'Important dans les positions basses, les petits pas rapides et la répétition des déplacements sans perte de tonicité.'},
+    'pallof':{physical:'Gainage anti-rotation : garder bassin et thorax stables malgré une force latérale.',padel:'Permet de transmettre la force entre jambes et haut du corps tout en contrôlant la rotation lors des frappes et des freinages.'},
+    'dead-hang':{physical:'Grip, tolérance des épaules à la suspension et première base du parcours traction.',padel:'Le grip n’est pas entraîné pour serrer davantage la raquette, mais pour construire un avant-bras robuste et une épaule mieux tolérante aux charges.'},
+    'active-hang':{physical:'Contrôle scapulaire bras tendus et stabilité d’épaule.',padel:'Soutient le contrôle de l’omoplate lors des gestes au-dessus de la tête, notamment bandeja, vibora et smash.'},
+    'scap-pullup':{physical:'Force et coordination des abaisseurs/stabilisateurs de l’omoplate.',padel:'Prépare une épaule plus stable pour répéter les frappes aériennes sans tout déléguer au bras.'},
+    'negative-pullup':{physical:'Force excentrique spécifique de traction et contrôle du haut du corps.',padel:'Renforce dos et stabilité scapulaire, utiles pour équilibrer le volume important de gestes de poussée et rotation du bras dominant.'},
+    'assisted-pullup':{physical:'Apprentissage du mouvement complet de traction avec charge adaptée.',padel:'Développe force du dos et contrôle de l’épaule sans rechercher une hypertrophie spécifique au padel.'},
+    'pullup':{physical:'Force relative du dos, des bras et du grip avec contrôle scapulaire.',padel:'Contribue à une ceinture scapulaire robuste et à l’équilibre musculaire autour d’une épaule très sollicitée par les frappes.'},
+    'handstand-wall':{physical:'Stabilité de l’épaule, gainage et contrôle corporel en appui renversé.',padel:'Transfert indirect : surtout un skill de calisthénie motivant qui développe contrôle et stabilité, pas un exercice prioritaire de performance padel.'},
+    'pike-support':{physical:'Première étape d’appui sur les bras : stabilité scapulaire et tolérance des poignets/épaules.',padel:'Transfert indirect ; sert surtout de base sûre au parcours d’appui renversé et au contrôle des épaules.'},
+    'elevated-pike':{physical:'Augmente progressivement la charge portée par les épaules.',padel:'Transfert indirect, utile surtout pour construire la stabilité et la confiance avant les skills plus avancés.'},
+    'wall-walk-partial':{physical:'Contrôle du tronc et des épaules dans une inversion progressive.',padel:'Transfert indirect ; développe surtout le contrôle corporel et la stabilité de la ceinture scapulaire.'},
+    'dip':{physical:'Force de poussée des triceps, pectoraux et épaules.',padel:'Intérêt secondaire : force générale du haut du corps. Le volume reste modéré pour ne pas surcharger l’avant de l’épaule.'},
+    'support-hold':{physical:'Stabilité sur barres parallèles et contrôle des épaules bras tendus.',padel:'Transfert indirect ; sert surtout de prérequis sûr avant les dips.'},
+    'row':{physical:'Force du dos et contrôle des omoplates en tirage horizontal.',padel:'Compense les nombreux gestes antérieurs de frappe et soutient la stabilité de l’épaule et la posture.'},
+    'incline-pushup':{physical:'Apprentissage d’une poussée propre avec gainage.',padel:'Force générale du haut du corps et contrôle du tronc ; transfert modéré mais utile comme base.'},
+    'pushup':{physical:'Poussée du haut du corps associée à un gainage global.',padel:'Soutient la robustesse générale du haut du corps et la transmission de force, sans chercher à reproduire le geste de frappe.'},
+    'woodchop':{physical:'Production et contrôle de force en rotation entre hanches, tronc et bras.',padel:'Transfert direct vers les frappes : apprendre à produire une rotation coordonnée plutôt qu’à frapper uniquement avec le bras.'},
+    'facepull':{physical:'Renforcement des rotateurs externes et muscles postérieurs de l’épaule.',padel:'Participe à l’équilibre de l’épaule dominante et à la tolérance des gestes répétés au-dessus de la tête.'},
+    'wrist-ext':{physical:'Renforcement progressif des extenseurs du poignet.',padel:'Objectif surtout préventif vis-à-vis de la charge répétée sur l’avant-bras et du risque d’épicondylalgie latérale.'},
+    'pronation':{physical:'Force et contrôle des rotateurs de l’avant-bras.',padel:'Aide l’avant-bras à tolérer les changements d’orientation de la raquette et complète le travail préventif du coude.'},
+    'forearm-isometric':{physical:'Charge légère et contrôlée des extenseurs du poignet en isométrique.',padel:'Option de maintien/prévention pendant une semaine très chargée en sports de raquette, sans ajouter beaucoup de fatigue.'},
+    'farmer':{physical:'Grip, gainage anti-inclinaison et stabilité d’épaule en marche chargée.',padel:'Renforce la robustesse globale et le contrôle du tronc ; transfert indirect aux appuis et à la tolérance de l’avant-bras.'},
+    'splitstep':{physical:'Réactivité des appuis et capacité à repartir immédiatement après un petit allègement.',padel:'Transfert très direct : synchroniser la reprise d’appui avec la frappe adverse pour partir plus tôt vers la balle.'},
+    'skater':{physical:'Puissance latérale unipodale et contrôle de réception.',padel:'Très pertinent pour les déplacements latéraux, le freinage et la reprise après une balle éloignée.'},
+    'reaction':{physical:'Temps de réaction moteur et choix rapide d’une direction.',padel:'Cherche à réduire le délai entre l’information visuelle et le premier pas, notamment à la volée et sur les changements de direction.'},
+    'lsit':{physical:'Gainage, compression de hanche et force en appui.',padel:'Transfert indirect : skill de calisthénie utile au contrôle corporel mais non indispensable à la performance padel.'},
+    'pistol':{physical:'Force unilatérale, mobilité et contrôle du membre inférieur.',padel:'Peut améliorer le contrôle sur une jambe et la capacité à sortir d’une position basse ; la progression reste secondaire par rapport aux exercices plus spécifiques.'},
+    'deadbug':{physical:'Contrôle lombo-pelvien et dissociation bras-jambes sans charge importante.',padel:'Aide à stabiliser le tronc pendant que les membres bougent rapidement et constitue un gainage peu fatigant entre séances.'},
+    'shortfoot':{physical:'Contrôle de l’arche du pied et musculature intrinsèque du pied.',padel:'Soutient la qualité des appuis et la tolérance du pied lors des tournois, particulièrement si le talon ou la voûte deviennent sensibles.'},
+    'anklemob':{physical:'Mobilité de cheville en dorsiflexion dans une amplitude confortable.',padel:'Peut faciliter les positions basses et certains freinages. À conserver surtout si une raideur limite réellement le mouvement, pas comme objectif en soi.'},
+    'thoracic':{physical:'Mobilité en rotation du rachis thoracique.',padel:'Permet de répartir davantage la rotation entre tronc et épaule lors des frappes et peut limiter les compensations.'},
+    'band-external':{physical:'Renforcement léger des rotateurs externes de l’épaule.',padel:'Préparation et entretien de la coiffe des rotateurs pour les frappes répétées, particulièrement les gestes au-dessus de la tête.'},
+    'wall-slide':{physical:'Mobilité active et coordination scapulo-humérale.',padel:'Entretient une élévation de bras contrôlée utile pour les frappes aériennes sans ajouter une forte charge.'}
+  };
+  function fallback(e){
+    const cat=(e.cat||'').toLowerCase();
+    if(cat.includes('mobil'))return{physical:'Améliore une amplitude ou un contrôle articulaire utile au mouvement.',padel:'À utiliser si cette mobilité facilite réellement tes positions ou déplacements sur le terrain.'};
+    if(cat.includes('prévention'))return{physical:'Renforce progressivement une zone fréquemment sollicitée.',padel:'Objectif principal : mieux tolérer la répétition des entraînements et tournois.'};
+    if(cat.includes('puissance')||cat.includes('agilité'))return{physical:'Développe vitesse, puissance ou qualité des appuis.',padel:'Cherche un transfert vers des déplacements plus rapides, plus stables et plus réactifs.'};
+    if(cat.includes('tronc'))return{physical:'Développe le contrôle du tronc et la transmission de force.',padel:'Soutient la stabilité pendant les déplacements et la transmission de force vers la raquette.'};
+    return{physical:e.goal||'Développe une qualité physique générale utile à ton programme.',padel:'Le transfert au padel est indirect ; l’intérêt est surtout de construire un corps plus robuste et capable de répéter les efforts.'};
+  }
+  function whyBlock(e){const w=WHY[e.id]||fallback(e);return `<section class="why-exercise"><h3>Pourquoi je fais cet exercice ?</h3><div class="why-card"><span class="why-icon">◉</span><div><strong>Pour le physique</strong><p>${w.physical}</p></div></div><div class="why-card"><span class="why-icon">⌁</span><div><strong>Pour le padel</strong><p>${w.padel}</p></div></div><p class="why-note">Le transfert n’est pas automatique : utilise aussi tes sensations et ce que tu observes sur le terrain pour juger si cet exercice mérite de rester prioritaire.</p></section>`;}
+  const prevOpen=openExercise;
+  openExercise=function(id){
+    prevOpen(id);
+    const e=exById(id),box=document.querySelector('#exerciseDetail');if(!e||!box)return;
+    box.querySelector('.why-exercise')?.remove();
+    const visual=box.querySelector('[data-real-visual]');
+    if(visual)visual.insertAdjacentHTML('afterend',whyBlock(e));
+    else{const p=[...box.children].find(x=>x.tagName==='P');(p||box.querySelector('h2'))?.insertAdjacentHTML('afterend',whyBlock(e));}
+  };
+  const css=document.createElement('style');css.textContent=`.why-exercise{margin:14px 0}.why-exercise h3{margin:0 0 9px}.why-card{display:grid;grid-template-columns:30px 1fr;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px;margin:7px 0}.why-card strong{color:var(--accent)}.why-card p{margin:5px 0 0;font-size:13px;line-height:1.4}.why-icon{font-size:20px;color:var(--accent)}.why-note{font-size:11px;color:var(--muted);line-height:1.4}`;document.head.appendChild(css);
+})();
