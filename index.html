@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101316" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Padel Athlete" />
+  <title>Padel Athlete</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">PRÉPARATION PHYSIQUE</div>
+      <h1>Padel Athlete</h1>
+    </div>
+    <button class="icon-button" id="installHelp" aria-label="Installer">＋</button>
+  </header>
+
+  <main id="app">
+    <section id="homeView" class="view active">
+      <div class="hero card">
+        <div>
+          <div class="eyebrow">CETTE SEMAINE</div>
+          <h2 id="weekTitle"></h2>
+          <p id="weekSummary"></p>
+        </div>
+        <div class="score-ring" id="completionRing"><span id="completionText">0%</span></div>
+      </div>
+
+      <div class="section-header">
+        <h2>Prochaine séance</h2>
+        <button class="link-button" data-go="calendarView">Calendrier</button>
+      </div>
+      <div id="nextWorkoutCard"></div>
+
+      <div class="section-header">
+        <h2>Adaptation du programme</h2>
+        <button class="link-button" data-go="insightsView">Voir l'analyse</button>
+      </div>
+      <div id="adaptiveSummary"></div>
+
+
+      <div class="section-header"><h2>Repères rapides</h2></div>
+      <div class="metric-grid" id="quickMetrics"></div>
+
+
+      <div class="section-header"><h2>État athlétique</h2></div>
+      <div class="dashboard-grid">
+        <div class="dash-card"><small>Charge 7 j*</small><strong id="load7">—</strong><span id="load7Trend">—</span></div>
+        <div class="dash-card"><small>Récupération*</small><strong id="recoveryScore">—</strong><span id="recoveryLabel">—</span></div>
+        <div class="dash-card"><small>Douleur récente</small><strong id="painScore">—</strong><span id="painLabel">—</span></div>
+        <div class="dash-card"><small>Disponibilité*</small><strong id="readinessScore">—</strong><span id="readinessLabel">—</span></div>
+      </div>
+      <div id="trendAlerts"></div>
+      <p class="muted">* Indicateurs internes de suivi personnel, non validés à visée diagnostique.</p>
+
+      <div class="section-header"><h2>Récupération</h2></div>
+      <div class="card compact">
+        <div class="form-grid">
+          <label>Fatigue aujourd'hui
+            <select id="fatigueSelect">
+              <option value="1">1 — Très frais</option><option value="2">2</option><option value="3" selected>3 — Normal</option>
+              <option value="4">4</option><option value="5">5 — Très fatigué</option>
+            </select>
+          </label>
+          <label>Douleur coude (0–10)<input type="number" id="elbowPain" min="0" max="10" value="0"></label>
+          <label>Douleur talon (0–10)<input type="number" id="heelPain" min="0" max="10" value="0"></label>
+        </div>
+        <button class="primary" id="saveReadiness">Enregistrer</button>
+      </div>
+    </section>
+
+    <section id="calendarView" class="view">
+      <div class="section-header">
+        <div>
+          <div class="eyebrow">PLANIFICATION</div>
+          <h2>Calendrier</h2>
+        </div>
+        <button class="secondary" id="todayBtn">Aujourd'hui</button>
+      </div>
+      <div class="calendar-toolbar">
+        <button id="prevMonth">‹</button><strong id="monthLabel"></strong><button id="nextMonth">›</button>
+      </div>
+      <div class="calendar card">
+        <div class="dow"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </div>
+      <div id="selectedDayPanel"></div>
+    </section>
+
+    <section id="workoutsView" class="view">
+      <div class="eyebrow">PROGRAMME</div>
+      <h2>Séances</h2>
+      <p class="muted">Le contenu est stable plusieurs semaines ; les charges, répétitions et variantes progressent.</p>
+      <div id="workoutList"></div>
+    </section>
+
+    <section id="libraryView" class="view">
+      <div class="eyebrow">TECHNIQUE</div>
+      <h2>Bibliothèque d'exercices</h2>
+      <input class="search" id="exerciseSearch" placeholder="Rechercher un exercice…" />
+      <div class="chip-row" id="categoryFilters"></div>
+      <div id="exerciseLibrary"></div>
+    </section>
+
+    <section id="progressView" class="view">
+      <div class="eyebrow">SUIVI</div>
+      <h2>Progression</h2>
+      <div class="card compact">
+        <div class="form-grid">
+          <label>Date<input type="date" id="metricDate"></label>
+          <label>Poids (kg)<input type="number" step="0.1" id="weight"></label>
+          <label>Tour de taille (cm)<input type="number" step="0.1" id="waist"></label>
+          <label>FC repos (bpm)<input type="number" id="restHr"></label>
+          <label>Tractions strictes<input type="number" id="pullups"></label>
+          <label>Pompes strictes<input type="number" id="pushups"></label>
+          <label>L-sit (s)<input type="number" id="lsit"></label>
+          <label>Handstand (s)<input type="number" id="handstand"></label>
+          <label>Détente verticale (cm)<input type="number" step="0.1" id="jump"></label>
+          <label>Sprint 5 m (s)<input type="number" step="0.01" id="sprint5"></label>
+          <label>Grip D (kg)<input type="number" step="0.1" id="gripR"></label>
+          <label>Grip G (kg)<input type="number" step="0.1" id="gripL"></label>
+          <label>Dorsiflexion D (cm)<input type="number" step="0.1" id="ankleR"></label>
+          <label>Dorsiflexion G (cm)<input type="number" step="0.1" id="ankleL"></label>
+        </div>
+        <button class="primary" id="saveMetrics">Ajouter les mesures</button>
+      </div>
+      <div class="card">
+        <div class="chart-head">
+          <h3>Évolution</h3>
+          <select id="chartMetric"></select>
+        </div>
+        <canvas id="progressChart" height="220"></canvas>
+      </div>
+
+
+      <div class="card compact">
+        <div class="section-header" style="margin-top:0">
+          <h3>Re-test à 8 semaines</h3>
+          <span class="badge accent" id="retestBadge">À programmer</span>
+        </div>
+        <p class="muted">Même protocole et conditions aussi similaires que possible.</p>
+        <div id="retestChecklist"></div>
+        <button class="secondary" id="markRetestDone">Marquer le re-test comme réalisé aujourd'hui</button>
+      </div>
+
+      <div class="card compact">
+        <div class="section-header" style="margin-top:0">
+          <h3>Objectifs calisthénie</h3>
+          <span class="badge accent">Skills</span>
+        </div>
+        <div id="skillGoals"></div>
+      </div>
+
+
+      <div class="card">
+        <div class="section-header" style="margin-top:0">
+          <h3>Historique d'entraînement</h3>
+          <button class="link-button" id="clearFilters">Tout voir</button>
+        </div>
+        <div id="trainingHistory"></div>
+      </div>
+
+      <div id="latestMetrics"></div>
+    </section>
+
+
+    <section id="sessionView" class="view">
+      <div class="session-top">
+        <button class="secondary" id="exitSession">Quitter</button>
+        <div class="session-progress-wrap">
+          <div class="session-progress"><div id="sessionProgressBar"></div></div>
+          <small id="sessionProgressText">0 / 0</small>
+        </div>
+      </div>
+      <div id="liveSession"></div>
+    </section>
+
+
+    <section id="insightsView" class="view">
+      <div class="eyebrow">ADAPTATION</div>
+      <h2>Coach adaptatif</h2>
+      <p class="muted">Les propositions sont calculées à partir de ce que tu as réellement réalisé, de l'effort perçu, des douleurs et de tes retours terrain.</p>
+
+
+      <div class="card compact">
+        <h3>Plan des 8 prochaines semaines</h3>
+        <div id="periodizationPlan"></div>
+      </div>
+
+      <div class="card compact">
+        <h3>Priorités actuelles</h3>
+        <div id="prioritySuggestions"></div>
+      </div>
+
+      
+      <div class="card compact">
+        <h3>Parcours techniques</h3>
+        <p class="muted">Les exercices avancés ne sont proposés qu'après validation de critères de maîtrise.</p>
+        <div id="skillPathways"></div>
+      </div>
+
+      <div class="card compact">
+        <h3>Prochaines progressions proposées</h3>
+        <div id="progressionSuggestions"></div>
+      </div>
+
+      <div class="card compact">
+        <h3>Journal d'entraînement / tournoi</h3>
+        <div class="form-grid">
+          <label>Date<input type="date" id="journalDate"></label>
+          <label>Type
+            <select id="journalType">
+              <option value="padel">Padel</option>
+              <option value="tournament">Tournoi</option>
+              <option value="physical">Séance physique</option>
+              <option value="recovery">Récupération</option>
+            </select>
+          </label>
+          <label>Énergie (1–5)<input type="number" id="journalEnergy" min="1" max="5" value="3"></label>
+          <label>Qualité / sensations (1–5)<input type="number" id="journalQuality" min="1" max="5" value="3"></label>
+        </div>
+        <label>Lacunes ou difficultés observées
+          <textarea id="journalWeaknesses" rows="3" placeholder="Ex. retard à la volée, difficulté sur les balles basses, fatigue des jambes en fin de tournoi…"></textarea>
+        </label>
+        <label>Points positifs / sensations
+          <textarea id="journalPositives" rows="3" placeholder="Ex. meilleure stabilité, déplacements plus fluides, smash plus puissant…"></textarea>
+        </label>
+        <label>Douleurs ou gêne
+          <textarea id="journalPainNote" rows="2" placeholder="Ex. gêne talon droit après 3 matchs, 3/10, disparition le lendemain…"></textarea>
+        </label>
+        <div class="pain-grid">
+          <label>Coude<input type="number" id="journalElbow" min="0" max="10" value="0"></label>
+          <label>Épaule<input type="number" id="journalShoulder" min="0" max="10" value="0"></label>
+          <label>Genou<input type="number" id="journalKnee" min="0" max="10" value="0"></label>
+          <label>Talon / pied<input type="number" id="journalHeel" min="0" max="10" value="0"></label>
+          <label>Dos<input type="number" id="journalBack" min="0" max="10" value="0"></label>
+        </div>
+        <button class="primary" id="saveJournal">Enregistrer le journal</button>
+      </div>
+
+      <div class="card">
+        <h3>Historique des retours</h3>
+        <div id="journalHistory"></div>
+      </div>
+    </section>
+
+    <section id="settingsView" class="view">
+      <div class="eyebrow">PERSONNALISATION</div>
+      <h2>Réglages</h2>
+      <div class="card compact">
+        <h3>Semaine habituelle</h3>
+        <label>Jour du cours de padel
+          <select id="padelDay">
+            <option value="2">Mardi</option>
+            <option value="4">Jeudi</option>
+          </select>
+        </label>
+        <p class="muted">L'application propose automatiquement un placement cohérent des trois séances physiques autour du padel.</p>
+        <button class="primary" id="applyWeeklyPlan">Recalculer la semaine</button>
+      </div>
+      <div class="card compact">
+        <h3>Semaine particulière</h3>
+        <p class="muted">Utilise ce mode pour un tournoi ou une semaine très chargée en sports de raquette.</p>
+        <div class="form-grid">
+          <label>Début<input type="date" id="specialStart"></label>
+          <label>Type
+            <select id="specialType"><option value="ucpa">UCPA / stage intensif</option><option value="tournament">Tournoi</option><option value="deload">Allègement</option></select>
+          </label>
+        </div>
+        <button class="secondary" id="addSpecialWeek">Ajouter au calendrier</button>
+      </div>
+
+      <div class="card compact">
+        <h3>Rappels</h3>
+        <label class="toggle-row">Rappel séance planifiée
+          <input type="checkbox" id="reminderWorkout">
+        </label>
+        <label class="toggle-row">Rappel de re-test physique tous les 8 semaines
+          <input type="checkbox" id="reminderTest">
+        </label>
+        <p class="muted">La PWA peut demander l’autorisation de notifications lorsque le navigateur les prend en charge. Les rappels planifiés précisément nécessiteront un service serveur dans une future version.</p>
+        <button class="secondary" id="requestNotifications">Autoriser les notifications</button>
+      </div>
+
+      <div class="card compact">
+        <h3>Données</h3>
+        <p class="muted">Cette version enregistre les données localement sur l'iPhone ou le navigateur.</p>
+        <div class="button-row">
+          <button class="secondary" id="exportData">Exporter</button>
+          <label class="secondary file-label">Importer<input type="file" id="importData" accept=".json"></label>
+        </div>
+      </div>
+      <div class="card compact">
+        <h3>Installation iPhone</h3>
+        <ol class="instructions">
+          <li>Ouvrir l'application dans Safari.</li>
+          <li>Partager → Ajouter à l'écran d'accueil.</li>
+          <li>Activer « Ouvrir comme app web » si proposé.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button data-view="homeView" class="active"><span>⌂</span>Accueil</button>
+    <button data-view="calendarView"><span>▦</span>Planning</button>
+    <button data-view="workoutsView"><span>▶</span>Séances</button>
+    <button data-view="libraryView"><span>◎</span>Exercices</button>
+    <button data-view="progressView"><span>↗</span>Suivi</button>
+    <button data-view="insightsView"><span>◇</span>Coach</button>
+    <button data-view="settingsView"><span>⚙</span>Réglages</button>
+  </nav>
+
+  <dialog id="exerciseDialog">
+    <button class="dialog-close" id="closeDialog">×</button>
+    <div id="exerciseDetail"></div>
+  </dialog>
+
+  <dialog id="workoutDialog">
+    <button class="dialog-close" id="closeWorkoutDialog">×</button>
+    <div id="workoutDetail"></div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
